@@ -67,40 +67,45 @@ function Weather(props) {
         c50n: "#404447"
     }
 
+
     const convertDate = (unixTime, offset) => {
         const d = new Date();
         let diff = d.getTimezoneOffset() * 60 * 1000;
-        return new Date(unixTime * 1000 + offset * 1000 + diff);
-      };
+        return new Date().setTime(unixTime * 1000) + offset * 1000 + diff;
+    }
 
-      const makeDailyData = (pData) => {
-        const f = pData.daily.slice(0, 8).map((day) => ({
-          day: moment(convertDate(day.dt, pData.timezone_offset)).format("ddd"),
-          min: day.temp.min,
-          max: day.temp.max,
-        }));
+    const makeDailyData = (pData) => {
+        let f = [];
+        for (let i = 0; i < 8; i++) {
+            let x = {};
+            let s = moment(convertDate(pData.daily[i].dt, pData.timezone_offset)).format('dddd');
+            x.day = s.substring(0, 3);
+            x.min = pData.daily[i].temp.min;
+            x.max = pData.daily[i].temp.max;
+            f.push(x);
+        }
         setForecastData(f);
-      };
-      
+    }
 
     const makeHourlyData = (pData) => {
-        const updatedHourly = pData.hourly.map((hour, index) => ({
-          ...hour,
-          id: index,
-          dt: convertDate(hour.dt, pData.timezone_offset),
-        }));
-        setHourly(updatedHourly);
-      }
-      
+        for (let i = 0; i < 48; i++) {
+            pData.hourly[i].id = i;
+            pData.hourly[i].dt = convertDate(pData.hourly[i].dt,pData.timezone_offset);
+        }
+        
+        setHourly(pData.hourly);
+    }
 
-      const updateWeatherData = (pData) => {
+    const updateWeatherData = (pData) => {
         setDaily(pData.daily);
         makeHourlyData(pData);
-      
+    
+
         setMain(pData.current.weather[0].main);
-        setTemp(pData.current.temp.toFixed(0));
+        setTemp((pData.current.temp).toFixed(0));
         setOffset(pData.timezone_offset * 1000);
-        setFeels(pData.current.feels_like.toFixed(2));
+        
+        setFeels((pData.current.feels_like).toFixed(2));
         setHumidity(pData.current.humidity);
         setPressure(pData.current.pressure);
         setWindSpeed(pData.current.wind_speed);
@@ -110,80 +115,62 @@ function Weather(props) {
         setSunset(convertDate(pData.current.sunset, pData.timezone_offset));
         setDate(convertDate(pData.current.dt, pData.timezone_offset));
         setIconid(pData.current.weather[0].icon);
-      
+
         makeDailyData(pData);
-      };
+    }
 
 
-      const getCoordinates = async () => {
-        try {
-          const cityName = document.getElementById('sbox').value;
-          const urlcoord = `http://api.openweathermap.org/data/2.5/weather?q=${cityName}&APPID=${props.api_weather}&units=metric`;
-          const response = await fetch(urlcoord);
-          const parsedData = await response.json();
-      
-          if (parsedData.cod === 200) {
+    const getCoordinates = async () => {
+
+        let urlcoord = `http://api.openweathermap.org/data/2.5/weather?q=${document.getElementById('sbox').value}&APPID=${props.api_weather}&units=metric`
+        let data = await fetch(urlcoord);
+        let parsedData = await data.json();
+
+        if (parsedData.cod === 200)
             return {
-              lon: parsedData.coord.lon,
-              lat: parsedData.coord.lat,
-              cod: parsedData.cod,
-              cityName: parsedData.name,
-            };
-          } else {
+                lon: await parsedData.coord.lon,
+                lat: await parsedData.coord.lat,
+                cod: await parsedData.cod,
+                cityName: await parsedData.name
+            }
+        else {
             return {
-              cod: parsedData.cod,
-              message: parsedData.message,
-            };
-          }
-        } catch (error) {
-          console.error("Error getting coordinates:", error);
-          return {
-            cod: 500,
-            message: "Internal Server Error",
-          };
+                cod: await parsedData.cod,
+                message: await parsedData.message
+            }
         }
-      };
+    }
 
 
     const getWeatherData = async (lat, lon) => {
-        try {
-          const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${props.api_onecall}&units=metric`;
-          const response = await fetch(url);
-          const pdata = await response.json();
-          return pdata;
-        } catch (error) {
-          console.error("Error getting weather data:", error);
-          return null;
-        }
-      };
+        setLongitude(lon);
+        setLatitude(lat);
+
+        let url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${props.api_onecall}&units=metric`
+        let mdata = await fetch(url);
+        let pData = await mdata.json();
+
+        return pData;
+    }
 
 
     const updateWeather = async () => {
         setLoading(true);
-        try {
-          const data = await getCoordinates();
-        
-          if (data.cod === 200) {
+        const data = await getCoordinates();
+        if (data.cod === 200) {
             const { lat, lon } = data;
             setExist(true);
             setCity(data.cityName);
             const pData = await getWeatherData(lat, lon);
             updateWeatherData(pData);
-          } else {
+        } else {
+
             setExist(false);
             setCode(data.cod);
             setErr(data.message);
-          }
-        } catch (error) {
-          console.error("Error updating weather:", error);
-          setExist(false);
-          setCode(500);
-          setErr("Failed to fetch weather data.");
         }
-        
         setLoading(false);
-      }
-      
+    }
 
     useEffect(() => {
 
