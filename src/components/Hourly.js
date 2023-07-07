@@ -14,7 +14,7 @@ function Hourly(props) {
                     borderRadius: "15px"
                 }}>
                     <img src={`http://openweathermap.org/img/wn/${element.weather[0].icon}@2x.png`} className="mb-0" alt={element.weather[0].main}></img>
-                    <p className="display-5">{element.temp.toFixed(0)} &deg;C</p>
+                    <p className="display-5">{element.temp.toFixed(0)}&deg;C</p>
                     <p>{moment(element.dt).format('hh:mm a')}</p>
                     <p>{moment(element.dt).format('dddd').substring(0,3)}</p>
                 </div>

@@ -9,9 +9,9 @@ function App() {
   const api_onecall = process.env.REACT_APP_API_KEY_ONE_CALL
   
   return (
-    <>
+    <div className="App">
       <Weather api_weather = {api_weather} api_onecall = {api_onecall}> </Weather>
-    </>
+    </div>
   );
 }
 

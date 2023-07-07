@@ -19,12 +19,12 @@ function Footer(props) {
             <div className="col-6 mt-3">
                 <div className="row">
                     <div className="col-md-6 col-12">
-                    <p className="text-start"><b>Developed by:</b>  Prashant</p>
+                    <p className="text-start"><b>Developed by:</b>  Abhishek</p>
                     </div>
                     <div className="col-md-6 col-12 text-start">
-                        <a href="https://www.linkedin.com/in/prashant-kumar-7aa9a4203/" target="_blank" rel="noopener noreferrer" className="social-icon" style={{ color:"white", fontSize:"25px"}}><FontAwesomeIcon icon={faLinkedin}/></a>
-                        <a href="https://github.com/prashantpks" target="_blank" rel="noopener noreferrer"  className="social-icon" style={{ color:"white", fontSize:"25px"}}><FontAwesomeIcon icon={faGithub}/></a>
-                        <a href="https://www.instagram.com/prashaaant_14/" target="_blank" rel="noopener noreferrer" className="social-icon" style={{ color:"white", fontSize:"25px"}}><FontAwesomeIcon icon={faInstagram}/> </a>
+                        <a href="https://www.linkedin.com/in/abhishek-singh-b46994202/" target="_blank" rel="noopener noreferrer" className="social-icon" style={{ color:"white", fontSize:"25px"}}><FontAwesomeIcon icon={faLinkedin}/></a>
+                        <a href="https://github.com/abhi4267" target="_blank" rel="noopener noreferrer"  className="social-icon" style={{ color:"white", fontSize:"25px"}}><FontAwesomeIcon icon={faGithub}/></a>
+                        <a href="https://www.instagram.com/ankur_3699/" target="_blank" rel="noopener noreferrer" className="social-icon" style={{ color:"white", fontSize:"25px"}}><FontAwesomeIcon icon={faInstagram}/> </a>
                     </div>
                 </div>
                 
