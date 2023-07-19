@@ -146,7 +146,7 @@ function Weather(props) {
         setLongitude(lon);
         setLatitude(lat);
 
-        let url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=49cc8c821cd2aff9af04c9f98c36eb74&units=metric`
+        let url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=1471b5b9fc5caa57e0e4a48dbc41b94e&units=metric`
         let mdata = await fetch(url);
         let pData = await mdata.json();
 
